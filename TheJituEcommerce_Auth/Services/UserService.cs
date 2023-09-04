@@ -14,13 +14,15 @@ namespace TheJituEcommerce_Auth.Services
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IJwtInterface _jwtGenerator;
 
-        public UserService(AppDbContext context, IMapper mapper, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserService(IJwtInterface jwtToken ,AppDbContext context, IMapper mapper, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
+            _jwtGenerator = jwtToken;
         }
         public async Task<bool> AssignUserRole(string email, string Rolename)
         {
@@ -56,7 +58,9 @@ namespace TheJituEcommerce_Auth.Services
                 new LoginRequestDto();
             }
             //correct credentials
-            var token = "Coming soon";
+            var roles = await _userManager.GetRolesAsync(user);
+            //create token
+            var token = _jwtGenerator.GenerateToken(user,roles);
             var LoggedUser = new LoginResponseDto()
             {
                 User = _mapper.Map<UserDto>(user),
