@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{15186E73-8FE1-43A2-8AC0-FCD35D85DAF5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{F258950D-235B-4169-9E32-A01FB2D92A45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{1B8EFBF3-31DC-4ECD-BE8D-0BA0F1EBFF6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheJituEcommerce_Auth", "TheJituEcommerce_Auth\TheJituEcommerce_Auth.csproj", "{223E547A-A0A7-48E6-A067-8AAC8DB4E89D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{223E547A-A0A7-48E6-A067-8AAC8DB4E89D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{223E547A-A0A7-48E6-A067-8AAC8DB4E89D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{223E547A-A0A7-48E6-A067-8AAC8DB4E89D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{223E547A-A0A7-48E6-A067-8AAC8DB4E89D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{223E547A-A0A7-48E6-A067-8AAC8DB4E89D} = {1B8EFBF3-31DC-4ECD-BE8D-0BA0F1EBFF6C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {934E545E-55A1-4C5B-859C-51068F1A0A3C}
+	EndGlobalSection
+EndGlobal
