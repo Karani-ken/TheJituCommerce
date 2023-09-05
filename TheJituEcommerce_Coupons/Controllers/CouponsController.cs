@@ -24,6 +24,7 @@ namespace TheJituEcommerce_Coupons.Controllers
         }
         //add coupon
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<string>> AddCoupon(CouponRequestDto newCoupon)
         {
             var coupon = _mapper.Map<Coupon>(newCoupon);

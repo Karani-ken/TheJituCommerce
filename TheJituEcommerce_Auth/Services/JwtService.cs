@@ -6,15 +6,16 @@ using System.Text;
 using TheJituEcommerce_Auth.Models;
 using TheJituEcommerce_Auth.Services.IService;
 using TheJituEcommerce_Auth.Utility;
+using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace TheJituEcommerce_Auth.Services
 {
     public class JwtService:IJwtInterface
     {
         private readonly JwtOptions _jwtOptions;
-        public JwtService(IOptions<JwtOptions> Options)
+        public JwtService(IOptions<JwtOptions> options)
         {
-            _jwtOptions = Options.Value;
+            _jwtOptions = options.Value;
         }
 
         public string GenerateToken(ApplicationUser user, IEnumerable<string> roles)

@@ -11,9 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{1B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheJituEcommerce_Auth", "TheJituEcommerce_Auth\TheJituEcommerce_Auth.csproj", "{223E547A-A0A7-48E6-A067-8AAC8DB4E89D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheJituEcommerce_Coupons", "TheJituEcommerce_Coupons\TheJituEcommerce_Coupons.csproj", "{94C2BE7E-2666-42B4-8BDA-0C3F0505CE67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheJituEcommerce_Coupons", "TheJituEcommerce_Coupons\TheJituEcommerce_Coupons.csproj", "{94C2BE7E-2666-42B4-8BDA-0C3F0505CE67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheJitu_ProductsService", "TheJitu_ProductsService\TheJitu_ProductsService.csproj", "{389C1DFB-B849-4DF6-831B-DB820664AFCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheJitu_ProductsService", "TheJitu_ProductsService\TheJitu_ProductsService.csproj", "{389C1DFB-B849-4DF6-831B-DB820664AFCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheJitu_Ecommerce_Cart", "TheJitu_Ecommerce_Cart\TheJitu_Ecommerce_Cart.csproj", "{C4BD5049-D48D-4BA5-A696-D6D7AB7399CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{389C1DFB-B849-4DF6-831B-DB820664AFCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{389C1DFB-B849-4DF6-831B-DB820664AFCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{389C1DFB-B849-4DF6-831B-DB820664AFCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4BD5049-D48D-4BA5-A696-D6D7AB7399CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4BD5049-D48D-4BA5-A696-D6D7AB7399CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4BD5049-D48D-4BA5-A696-D6D7AB7399CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4BD5049-D48D-4BA5-A696-D6D7AB7399CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{223E547A-A0A7-48E6-A067-8AAC8DB4E89D} = {1B8EFBF3-31DC-4ECD-BE8D-0BA0F1EBFF6C}
 		{94C2BE7E-2666-42B4-8BDA-0C3F0505CE67} = {1B8EFBF3-31DC-4ECD-BE8D-0BA0F1EBFF6C}
 		{389C1DFB-B849-4DF6-831B-DB820664AFCF} = {1B8EFBF3-31DC-4ECD-BE8D-0BA0F1EBFF6C}
+		{C4BD5049-D48D-4BA5-A696-D6D7AB7399CC} = {1B8EFBF3-31DC-4ECD-BE8D-0BA0F1EBFF6C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {934E545E-55A1-4C5B-859C-51068F1A0A3C}
