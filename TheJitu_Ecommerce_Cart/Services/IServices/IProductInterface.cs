@@ -1,6 +1,9 @@
-﻿namespace TheJitu_Ecommerce_Cart.Services.IServices
+﻿using TheJitu_Ecommerce_Cart.Models.Dtos;
+
+namespace TheJitu_Ecommerce_Cart.Services.IServices
 {
-    public class IProductInterface
+    public interface IProductInterface
     {
+        Task<IEnumerable<ProductDto>> GetProductaAsync();
     }
 }

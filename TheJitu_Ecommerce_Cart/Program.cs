@@ -20,8 +20,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 //register service
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IProductInterface, ProductService>();
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+//register base urls for services communications
+builder.Services.AddHttpClient("Product", c=>c.BaseAddress = new Uri(builder.Configuration["ServiceUrl:ProductApi"]));
+builder.Services.AddHttpClient("Coupon", c => c.BaseAddress = new Uri(builder.Configuration["ServiceUrl:Product"]));
 
 builder.AddSwaggenGenExtension();
 builder.AddAppAuthentication();

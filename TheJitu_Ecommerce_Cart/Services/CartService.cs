@@ -16,9 +16,17 @@ namespace TheJitu_Ecommerce_Cart.Services
             _context = context;
             _mapper = mapper;
         }
-        public Task<bool> ApplyCoupons(CartDto cartDto)
+        public async Task<bool> ApplyCoupons(CartDto cartDto) 
         {
-            throw new NotImplementedException();
+            //get the header
+            CartHeader cartHeaderFromDb = await _context.CartHeaders.FirstOrDefaultAsync(h => h.UserId ==
+            cartDto.CartHeader.UserId);
+            cartHeaderFromDb.CouponCode = cartDto.CartHeader.CouponCode;
+            _context.CartHeaders.Update(cartHeaderFromDb);
+            await _context.SaveChangesAsync();
+
+            return true;
+           
         }
 
         public async Task<bool> CartUpsert(CartDto cartDto)
@@ -60,7 +68,7 @@ namespace TheJitu_Ecommerce_Cart.Services
                     CartDetailsFromDb.Count += cartDto.CartDetails.First().Count;
                     var cartDetails = _mapper.Map<CartDetails>(cartDto.CartDetails.First());
                     _context.CartDetails.Add(cartDetails);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();     
 
                 }
                 return true;
@@ -69,14 +77,34 @@ namespace TheJitu_Ecommerce_Cart.Services
             return false;
         }
 
-        public Task<CartDto> GetUserCart(Guid userId)
+        public async Task<CartDto> GetUserCart(Guid userId)
         {
-            throw new NotImplementedException();
+            var cartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId);
+            var cartDetails =  _context.CartDetails.Where(x => x.CartHeaderId == cartHeader.CartHeaderId);
+            CartDto cart = new CartDto()
+            {
+                CartHeader = _mapper.Map<CartHeaderDto>(cartHeader),
+                CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(cartDetails)
+            };
+            return cart;
+            
         }
 
-        public Task<bool> RemoveFromCart(Guid CartDetailId)
-        {
-            throw new NotImplementedException();
+        public async Task<bool> RemoveFromCart(Guid CartDetailId)
+        {    
+            //get the cart to delete
+            CartDetails cartDetails = await _context.CartDetails.FirstOrDefaultAsync(c=>c.CartDetailsId == CartDetailId);
+            //check if the item is the lest item in the database
+            var itemsCount = _context.CartDetails.Where(c => c.CartHeaderId == cartDetails.CartHeaderId).Count();
+
+            _context.CartDetails.Remove(cartDetails);
+            if(itemsCount == 1)
+            {
+                _context.CartHeaders.Remove(_context.CartHeaders.FirstOrDefault(x=>x.CartHeaderId==cartDetails.CartHeaderId));
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
