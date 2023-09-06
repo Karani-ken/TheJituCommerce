@@ -21,6 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 //register service
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IProductInterface, ProductService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

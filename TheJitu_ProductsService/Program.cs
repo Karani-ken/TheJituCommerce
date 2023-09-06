@@ -20,6 +20,9 @@ builder.Services.AddScoped<IProductInterface, ProductService>();
 
 //automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.AddSwaggenGenExtension();
+builder.AddAppAuthentication();
 var app = builder.Build();
 
 
@@ -38,5 +41,4 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

@@ -42,6 +42,7 @@ namespace TheJitu_Ecommerce_Cart.Services
                 var newHeader = _mapper.Map<CartHeader>(cartDto.CartHeader);
                   _context.CartHeaders.Add(newHeader);
                 await _context.SaveChangesAsync();
+
                 //add cartDetails  and assign the header above
                 cartDto.CartDetails.First().CartHeaderId = newHeader.CartHeaderId;
                 var cartDetails = _mapper.Map<CartDetails>(cartDto.CartDetails.First());
@@ -52,7 +53,7 @@ namespace TheJitu_Ecommerce_Cart.Services
             else
             {
                 //the cart header exists and user is adding a new Item or Updating the count of an existing item
-                var  CartDetailsFromDb = await _context.CartDetails.FirstOrDefaultAsync(x=>x.ProductId ==
+                CartDetails  CartDetailsFromDb = await _context.CartDetails.FirstOrDefaultAsync(x=>x.ProductId ==
                 cartDto.CartDetails.First().ProductId && x.CartHeaderId == cartHeaderFromDb.CartHeaderId);
                 if (CartDetailsFromDb == null)
                 {
@@ -66,8 +67,7 @@ namespace TheJitu_Ecommerce_Cart.Services
                 {
                     //we are updating the count of a product
                     CartDetailsFromDb.Count += cartDto.CartDetails.First().Count;
-                    var cartDetails = _mapper.Map<CartDetails>(cartDto.CartDetails.First());
-                    _context.CartDetails.Add(cartDetails);
+                    _context.CartDetails.Update(CartDetailsFromDb);
                     await _context.SaveChangesAsync();     
 
                 }
