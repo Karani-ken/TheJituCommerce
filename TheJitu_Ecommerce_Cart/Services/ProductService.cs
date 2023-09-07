@@ -14,9 +14,10 @@ namespace TheJitu_Ecommerce_Cart.Services
         public async Task<IEnumerable<ProductDto>> GetProductaAsync()
         {
             var client = _httpClientFactory.CreateClient("Product");
-            var response = await client.GetAsync("/api/Prodcut");
+            var response = await client.GetAsync("/api/Product");
             var content = await response.Content.ReadAsStringAsync();
             var responseDto = JsonConvert.DeserializeObject<ResponseDto>(content);
+            Console.WriteLine(responseDto);
             if (responseDto.IsSuccess)
             {
                 return JsonConvert.DeserializeObject<IEnumerable<ProductDto>>(Convert.ToString(responseDto.Result));

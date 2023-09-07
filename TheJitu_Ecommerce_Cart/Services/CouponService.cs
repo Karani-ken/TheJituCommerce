@@ -15,7 +15,7 @@ namespace TheJitu_Ecommerce_Cart.Services
         public async Task<CouponDto> GetCouponData(string CouponCode)
         {
             var client = _httpClientFactory.CreateClient("Coupon");
-            var response = await client.GetAsync($"/api/Coupon/GetByName/{CouponCode}");
+            var response = await client.GetAsync($"/api/Coupons/GetByName/{CouponCode}");
             var content = await response.Content.ReadAsStringAsync();
             var responseDto = JsonConvert.DeserializeObject<ResponseDto>(content);
             if (responseDto.IsSuccess)

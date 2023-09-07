@@ -51,7 +51,7 @@ namespace TheJitu_ProductsService.Controllers
                 return NotFound(_responseDto);
             }
             _responseDto.Result = products;
-            return Ok(products);
+            return Ok(_responseDto);
         }
         //get product by id
         [HttpGet("GetById{id}")]
@@ -66,7 +66,7 @@ namespace TheJitu_ProductsService.Controllers
                 return NotFound(_responseDto);
             }
             _responseDto.Result = product;
-            return Ok(product);
+            return Ok(_responseDto);
         }
         //update product
         [HttpPut]

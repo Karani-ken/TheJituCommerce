@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TheJitu_ProductsService.Data;
 using TheJitu_ProductsService.Models;
+using TheJitu_ProductsService.Models.Dtos;
 
 namespace TheJitu_ProductsService.Services
 {

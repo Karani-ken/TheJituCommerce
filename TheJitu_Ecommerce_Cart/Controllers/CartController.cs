@@ -89,7 +89,7 @@ namespace TheJitu_Ecommerce_Cart.Controllers
             catch(Exception ex)
             {
                 _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.InnerException.Message;
+                _responseDto.Message = ex.Message;
                 return BadRequest(_responseDto);
             }
             return Ok(_responseDto);

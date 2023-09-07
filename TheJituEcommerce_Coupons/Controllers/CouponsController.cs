@@ -52,7 +52,7 @@ namespace TheJituEcommerce_Coupons.Controllers
             _responseDto.Result = Coupons;
             return Ok(_responseDto);
         }
-        [HttpGet("GetByName{code}")]
+        [HttpGet("GetByName/{code}")]
         public async Task<ActionResult<ResponseDto>> GetCoupon(string code)
         {
             var coupon = await _couponInterface.GetCouponByNameAsync(code);

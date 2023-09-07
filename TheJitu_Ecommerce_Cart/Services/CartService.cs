@@ -11,10 +11,14 @@ namespace TheJitu_Ecommerce_Cart.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        public CartService(AppDbContext context,IMapper mapper)
+        private readonly IProductInterface _productInterface;
+        private readonly ICouponService _couponService;
+        public CartService(AppDbContext context,IMapper mapper,IProductInterface productInterface,ICouponService couponService)
         {
             _context = context;
             _mapper = mapper;
+            _productInterface = productInterface;
+            _couponService = couponService;
         }
         public async Task<bool> ApplyCoupons(CartDto cartDto) 
         {
@@ -79,13 +83,33 @@ namespace TheJitu_Ecommerce_Cart.Services
 
         public async Task<CartDto> GetUserCart(Guid userId)
         {
-            var cartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId);
+            var cartHeader =  _context.CartHeaders.FirstOrDefault(c => c.UserId == userId);
             var cartDetails =  _context.CartDetails.Where(x => x.CartHeaderId == cartHeader.CartHeaderId);
             CartDto cart = new CartDto()
             {
                 CartHeader = _mapper.Map<CartHeaderDto>(cartHeader),
                 CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(cartDetails)
             };
+            //calculate Cart Total
+            var products = await _productInterface.GetProductaAsync(); //get the products 
+            foreach(var Item in cart.CartDetails)
+            {
+                Item.Product = products.FirstOrDefault(x => x.ProductId == Item.ProductId);
+                cart.CartHeader.CartTotal += (int)(Item.Count * Item.Product.Price);
+            }
+            //Apply Coupon
+            if (!string.IsNullOrWhiteSpace(cart.CartHeader.CouponCode))
+            {
+                //there is a coupon
+                var Coupon = await _couponService.GetCouponData(cart.CartHeader.CouponCode);
+                if(Coupon != null && cart.CartHeader.CartTotal > Coupon.CouponMinAmont)
+                {
+                    cart.CartHeader.CartTotal -= Coupon.CouponAmount;
+                    cart.CartHeader.Discount = Coupon.CouponAmount;
+                }
+               
+            }
+
             return cart;
             
         }

@@ -27,7 +27,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //register base urls for services communications
 builder.Services.AddHttpClient("Product", c=>c.BaseAddress = new Uri(builder.Configuration["ServiceUrl:ProductApi"]));
-builder.Services.AddHttpClient("Coupon", c => c.BaseAddress = new Uri(builder.Configuration["ServiceUrl:Product"]));
+builder.Services.AddHttpClient("Coupon", c => c.BaseAddress = new Uri(builder.Configuration["ServiceUrl:CouponApi"]));
 
 builder.AddSwaggenGenExtension();
 builder.AddAppAuthentication();
