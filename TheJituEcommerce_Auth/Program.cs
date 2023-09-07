@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ServiceBus;
 using TheJituEcommerce_Auth.Data;
 using TheJituEcommerce_Auth.Extensions;
 using TheJituEcommerce_Auth.Models;
@@ -26,6 +27,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 //register services
 builder.Services.AddScoped<IUserInterface, UserService>();
 builder.Services.AddScoped<IJwtInterface, JwtService>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 
 //automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

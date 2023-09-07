@@ -1,6 +1,8 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ServiceBus;
+using TheJituEcommerce_Auth.Models;
 using TheJituEcommerce_Auth.Models.DTOs;
 using TheJituEcommerce_Auth.Services.IService;
 
@@ -10,13 +12,17 @@ namespace TheJituEcommerce_Auth.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IMessageBus _messageBus;
+        private readonly IConfiguration _configuration;
         private IUserInterface _userInterface;
         private readonly ResponseDto _response;
-        public UserController(IUserInterface userInterface)
+        public UserController(IUserInterface userInterface,IMessageBus message,IConfiguration configuration)
         {
             _userInterface = userInterface;
             //Don't inject just initialize
             _response = new ResponseDto();
+            _configuration = configuration;
+            _messageBus = message;
         }
         [HttpPost("register")]
         public async Task<ActionResult<ResponseDto>> AddUser(RegisterRequestDto registerRequestDto)
@@ -29,6 +35,14 @@ namespace TheJituEcommerce_Auth.Controllers
 
                 return BadRequest(_response);
             }
+            //send email to queue
+            var queueName = _configuration.GetSection("QueuesandTopics:RegisterUser").Get<string>();
+            var message = new UserMessage()
+            {
+                Email = registerRequestDto.Email,
+                Name = registerRequestDto.Name
+            };
+            await _messageBus.PublishMessage(message, queueName);
             return Ok(_response);
         }
         [HttpPost("login")]
