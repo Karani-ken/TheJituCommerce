@@ -9,7 +9,7 @@ namespace TheJitu_EmailService.Services
         public async Task SendMail(UserMessageDto messageDto, string message)
         {
             MimeMessage message1= new MimeMessage();
-            message1.From.Add(new MailboxAddress("Everything E-Commerce", "my.test.email.01@gmail.com"));
+            message1.From.Add(new MailboxAddress("Everything E-Commerce", "my.test.email.me.01@gmail.com"));
 
             //send the recipient address
             message1.To.Add(new MailboxAddress(messageDto.Name, messageDto.Email));
@@ -24,7 +24,7 @@ namespace TheJitu_EmailService.Services
             var client = new SmtpClient();
             client.Connect("smtp.gmail.com", 587, false);
 
-            client.Authenticate("my.test.email.01@gmail.com", "ubqyzbodumwjlkvn");
+            client.Authenticate("my.test.email.me.01@gmail.com", "dqyv cgjh qgjt chgz");
 
             await client.SendAsync(message1);
             await client.DisconnectAsync(true);

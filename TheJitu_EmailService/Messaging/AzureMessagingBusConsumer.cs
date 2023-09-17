@@ -12,7 +12,7 @@ namespace TheJitu_EmailService.Messaging
         private readonly string ConnectionString;
         private readonly string QueueName;
         private readonly ServiceBusProcessor _registrationProcessor;
-        private readonly EmailSendService emailSend;
+        private readonly EmailSendService _emailSend;
 
         public AzureMessagingBusConsumer(IConfiguration configuration)
         {
@@ -23,15 +23,17 @@ namespace TheJitu_EmailService.Messaging
             //connect to the service bus client
             var serviceBusClient = new ServiceBusClient(ConnectionString);
             _registrationProcessor = serviceBusClient.CreateProcessor(QueueName);
-            emailSend=new EmailSendService();
+            Console.WriteLine("Queue"+QueueName);
+            _emailSend=new EmailSendService();
         }
         public async Task Start()
         {
-            //start processing
+            Console.WriteLine("xdffg");
+            //start pdfrocessing
             _registrationProcessor.ProcessMessageAsync += OnRegistration;
             _registrationProcessor.ProcessErrorAsync += ErrorHandler;
 
-            await _registrationProcessor.StopProcessingAsync();
+            await _registrationProcessor.StartProcessingAsync();
         }
         public async Task Stop()
         {
@@ -42,7 +44,8 @@ namespace TheJitu_EmailService.Messaging
 
         private Task ErrorHandler(ProcessErrorEventArgs args)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(args.ToString());
+            return Task.CompletedTask;
         }
 
         private async Task OnRegistration(ProcessMessageEventArgs args)
@@ -64,7 +67,7 @@ namespace TheJitu_EmailService.Messaging
                 stringBuilder.Append("<br/>");
                 stringBuilder.Append('\n');
                 stringBuilder.Append("<p> Start Shopping here</p>");
-                await emailSend.SendMail(userMessage, stringBuilder.ToString());
+                await _emailSend.SendMail(userMessage, stringBuilder.ToString());
                 //delete the email from the queue
                 await args.CompleteMessageAsync(message);
             }catch(Exception ex) {}
