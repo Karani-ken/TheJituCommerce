@@ -22,8 +22,52 @@ namespace TheJituEcommerce_OrderService.Controllers
             try
             {
                 var response = await _orderService.CreateOrderHeader(cartDto);
+                if (response != null)
+                {
+                    _responseDto.IsSuccess = true;
+                    _responseDto.Result = response;
+                }
+                else
+                {
+                    _responseDto.IsSuccess = false;
+                    return BadRequest(_responseDto);
+                }
+            }
+            catch(Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                 _responseDto.Message = ex.InnerException.Message;
+                return BadRequest(_responseDto);
+            }
+            return Ok(_responseDto);
+        }
+        //stripe payment
+        [HttpPost("StripePayment")]
+        public async Task<ActionResult<ResponseDto>> StripePayment(StripeRequestDto stripeRequestDto)
+        {
+            try
+            {
+                var response = await _orderService.StripePayment(stripeRequestDto);
                 _responseDto.Result = response;
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.InnerException.Message;
+                return BadRequest(_responseDto);
+            }
+            return Ok(_responseDto);
+        }
+        //validatePayment
+        [HttpPost("ValidatePayment")]
+        public async Task<ActionResult<ResponseDto>> ValidatePayment(Guid OrderId)
+        {
+            try
+            {
+                var response = await _orderService.ValidatePayment(OrderId);
+                _responseDto.Result = response;
+            }
+            catch (Exception ex)
             {
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = ex.InnerException.Message;

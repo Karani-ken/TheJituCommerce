@@ -24,7 +24,7 @@ namespace TheJituEcommerce_Coupons.Controllers
         }
         //add coupon
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<string>> AddCoupon(CouponRequestDto newCoupon)
         {
             var coupon = _mapper.Map<Coupon>(newCoupon);
@@ -35,6 +35,17 @@ namespace TheJituEcommerce_Coupons.Controllers
                 _responseDto.Message = "Error Occured";
                 return BadRequest(_responseDto);
             }
+            _responseDto.Result = res;
+            var options = new Stripe.CouponCreateOptions()
+            {
+                AmountOff = (long)(newCoupon.CouponAmount * 100),
+                Currency = "kes",
+                Id = newCoupon.CouponCode,
+                Name = newCoupon.CouponCode
+            };
+            var service = new Stripe.CouponService();
+            service.Create(options);
+
             return Ok(_responseDto);
 
         }
@@ -50,6 +61,8 @@ namespace TheJituEcommerce_Coupons.Controllers
                 return BadRequest(_responseDto);
             }
             _responseDto.Result = Coupons;
+          
+          
             return Ok(_responseDto);
         }
         [HttpGet("GetByName/{code}")]
@@ -67,7 +80,7 @@ namespace TheJituEcommerce_Coupons.Controllers
             return Ok(_responseDto);
         }
         [HttpPut]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<ResponseDto>> UpdateCoupon(Guid id, CouponRequestDto couponRequestDto)
         {
             var coupon = await _couponInterface.GetCouponByIdAsync(id);
@@ -84,7 +97,7 @@ namespace TheJituEcommerce_Coupons.Controllers
             return Ok(_responseDto);
         }
         [HttpDelete]
-       [Authorize(Roles = "Admin")]
+       ////[Authorize(Roles = "Admin")]
         public async Task<ActionResult<ResponseDto>> DeleteCoupon(Guid id)
         {
             var coupon = await _couponInterface.GetCouponByIdAsync(id);
@@ -94,8 +107,9 @@ namespace TheJituEcommerce_Coupons.Controllers
                 _responseDto.Message = "Error Occured";
                 return BadRequest(_responseDto);
             }
-            //delete
-
+            //delete coupon from stripe
+            var service = new Stripe.CouponService();
+            service.Delete(coupon.CouponCode);
             var response = await _couponInterface.DeleteCouponAsync(coupon);
             _responseDto.Result = response;
             return Ok(_responseDto);

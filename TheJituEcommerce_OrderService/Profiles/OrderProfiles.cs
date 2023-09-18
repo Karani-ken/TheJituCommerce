@@ -14,6 +14,8 @@ namespace TheJituEcommerce_OrderService.Profiles
                 .ForMember(dest => dest.ProductName, src => src.MapFrom(x => x.Product.Name))
                 .ForMember(dest => dest.Price, src => src.MapFrom(x => x.Product.Price));
 
+            CreateMap<OrderDetailsDto, CartDetailsDto>();
+
             CreateMap<OrderHeader, OrderHeaderDto>().ReverseMap();
             CreateMap<OrderDetails, OrderDetailsDto>().ReverseMap();
         }
