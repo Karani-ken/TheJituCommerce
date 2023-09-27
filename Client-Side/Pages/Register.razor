@@ -4,10 +4,10 @@
 @inject IAuthInterface authInterface
 @inject IJSRuntime jsRuntime
 <div class="row m-2">
-    <div class="col-6">
+    <div class="col-md-6">
         <img class="h-100 w-100" src="https://cdn.pixabay.com/photo/2015/06/24/15/45/hands-820272_640.jpg" />
     </div>
-    <div class="col-6">
+    <div class="col-md-6">
         <h1>Register User</h1>
         <EditForm Model="@newUser" OnValidSubmit="registerUser">
             <DataAnnotationsValidator />
@@ -40,7 +40,7 @@
                 <button type="button" style="width:100px" class="p-2 btn btn-secondary">Reset</button>
             </div>
             <div class="row">
-                <p class="col-4">Already a member? <a class="col-1" href="login">Login</a></p>
+                <p class="col-md-4">Already a member? <a class="col-md-1" href="login">Login</a></p>
 
             </div>
         </EditForm>

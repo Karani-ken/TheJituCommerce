@@ -5,11 +5,11 @@
 @inject AuthenticationStateProvider authProvider
 @inject NavigationManager navigationManager
 <div class="row mt-10">
-    <div class="col-6">
+    <div class="col-md-6">
         <img class="h-100 w-100" src="https://cdn.pixabay.com/photo/2015/05/11/14/36/business-762538_640.jpg" />
     </div>
 
-    <div class="col-6">
+    <div class="col-md-6">
         <h1> Login User</h1>
         <EditForm Model="@user" OnValidSubmit="loginUser">
             <DataAnnotationsValidator />
@@ -30,7 +30,7 @@
                 <button type="button" style="width:100px" class="p-2 btn btn-secondary">Reset</button>
             </div>
             <div class="row">
-                <p class="col-4">Not a member? <a class="col-1" href="register">Register</a></p>
+                <p class="col-md-4">Not a member? <a class="col-md-1" href="register">Register</a></p>
 
             </div>
         </EditForm>

@@ -5,7 +5,7 @@
 @inject IProductInterface productInterface
 @inject NavigationManager navigationManager
 <div class="row m-2">
-    <div class="col-6">
+    <div class="col-md-6">
         @if (string.IsNullOrWhiteSpace(product.ImageUrl))
         {
             <img class="h-100 w-100" src="https://cdn.pixabay.com/photo/2015/06/24/15/45/hands-820272_640.jpg" />
@@ -16,7 +16,7 @@
         }
 
     </div>
-    <div class="col-6">
+    <div class="col-md-6">
         @if (string.IsNullOrWhiteSpace(product.Name))
         {
             <h1>Add Product</h1>
