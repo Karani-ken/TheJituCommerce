@@ -1,0 +1,19 @@
+﻿@inject NavigationManager navmanager﻿
+<div class="card col-3 m-2 p-2" style="width: 18rem;">
+  <img src="@Product.ImageUrl" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">@Product.Name</h5>
+    <p class="card-text">@Product.Description</p>
+        <h6 class="card-title">@Product.Price</h6>
+        <button class="btn btn-primary" @onclick="(()=>showProduct(Product.ProductId))">View Product</button>
+  </div>
+</div>
+@code {
+    [Parameter]
+    public ProductDto? Product { get; set; }
+
+    private void showProduct(Guid id)
+    {
+        navmanager.NavigateTo($"/product/{id}");
+    }
+}

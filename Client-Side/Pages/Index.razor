@@ -1,0 +1,54 @@
+﻿@page "/"
+@inject IJSRuntime jsRuntime
+@inject IProductInterface productInterface
+@inject NavigationManager navigationManager
+<PageTitle>Home Page</PageTitle>
+<div class="row" style="width:100%;">
+    @if (isLoading)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+       
+
+            @if(products.Count == 0)
+            {
+            <p><i>You have no products</i></p>
+            }
+            else
+            {
+                <div class="row">
+                    @foreach (var product in products)
+                    {
+                        <ProductCard Product="product" />
+                    }
+
+                </div>
+            }
+        
+     
+    }
+</div>
+
+
+@code{
+    private List<ProductDto> products = new List<ProductDto>();
+    private bool isLoading = true;
+    private string role { get; set; }
+    private bool authenticated { get; set; }
+    [CascadingParameter]
+    public Task<AuthenticationState> _authState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await productInterface.GetProductsAsync();
+        isLoading = false;
+        var authState = await _authState;
+        role = authState.User.FindFirst("role")?.Value;
+        authenticated = authState.User.Identity.IsAuthenticated;
+        Console.WriteLine(authenticated);
+
+
+    }
+}

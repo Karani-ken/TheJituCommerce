@@ -21,6 +21,14 @@ builder.Services.AddScoped<IProductInterface, ProductService>();
 //automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+//Set cors policy
+builder.Services.AddCors(options => options.AddPolicy("policy1", build =>
+{
+    build.WithOrigins("https://localhost:7269");
+    build.AllowAnyHeader();
+    build.AllowAnyMethod();
+}));
+
 builder.AddSwaggenGenExtension();
 builder.AddAppAuthentication();
 var app = builder.Build();
@@ -37,7 +45,7 @@ if (app.Environment.IsDevelopment())
 app.UseMigration();
 
 app.UseHttpsRedirection();
-
+app.UseCors("policy1");
 app.UseAuthorization();
 
 app.MapControllers();

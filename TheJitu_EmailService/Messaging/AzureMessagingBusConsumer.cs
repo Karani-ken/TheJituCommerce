@@ -24,7 +24,7 @@ namespace TheJitu_EmailService.Messaging
             var serviceBusClient = new ServiceBusClient(ConnectionString);
             _registrationProcessor = serviceBusClient.CreateProcessor(QueueName);
             Console.WriteLine("Queue"+QueueName);
-            _emailSend=new EmailSendService();
+            _emailSend=new EmailSendService(_configuration);
         }
         public async Task Start()
         {

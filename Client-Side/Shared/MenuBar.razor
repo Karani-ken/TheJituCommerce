@@ -1,0 +1,42 @@
+﻿﻿
+@inject NavigationManager navigationManager
+@inject AuthenticationStateProvider authProvider
+@inject NavigationManager navigationManager
+@inject ILocalStorageService localStorage
+﻿<div class="header">
+    <a href="" class="text-decoration-none text-white p-3 fw-bold">Fast Shopping</a>
+    <div class="flex-row p-2">    
+         <AuthorizeView>
+             <Authorized>
+                <button class="btn btn-danger" @onclick="logout"> Logout </button>
+            </Authorized>
+            <NotAuthorized>
+                <button class="btn btn-primary" @onclick="login"> Login </button>
+                <button class="btn btn-primary" @onclick="register"> Register </button>
+            </NotAuthorized>
+         </AuthorizeView>      
+
+    </div>
+</div>
+
+@code {
+
+    private void register()
+    {
+        navigationManager.NavigateTo("register");
+    }
+
+
+    private void login()
+    {
+        navigationManager.NavigateTo("login");
+    }
+    private async Task logout()
+    {
+        await localStorage.RemoveItemAsync("authToken");
+        await authProvider.GetAuthenticationStateAsync();
+        navigationManager.NavigateTo("");
+    }
+
+   
+}

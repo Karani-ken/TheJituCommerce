@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\AddProduct.razor" />
+    <Content Remove="Pages\ProductDetails.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Shared\MenuBar.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10" PrivateAssets="all" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\AddProduct.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\AddProduct.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ProductDetails.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Shared\MenuBar.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\AddProduct.razor" />
+    <None Include="Pages\ProductDetails.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\ProductDetails.razor" />
+  </ItemGroup>
+
+</Project>

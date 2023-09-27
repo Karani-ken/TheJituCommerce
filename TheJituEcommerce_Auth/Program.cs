@@ -34,6 +34,12 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //configure JWtOptions 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 
+builder.Services.AddCors(options => options.AddPolicy("policy1", build =>
+{
+    build.WithOrigins("https://localhost:7269");
+    build.AllowAnyHeader();
+    build.AllowAnyMethod();
+}));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -44,10 +50,10 @@ if (app.Environment.IsDevelopment())
 }
 app.UseMigration();
 app.UseHttpsRedirection();
-
+app.UseCors("policy1");
 app.UseAuthorization();
 
 
 app.MapControllers();
-
+app.UseCors("policy1");
 app.Run();
