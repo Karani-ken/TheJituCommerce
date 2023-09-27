@@ -1,10 +1,9 @@
-﻿@page "/product/{id}"
-@using Client_Side.Models.Products;
-@using Client_Side.Services.Product;
+﻿@page "/product/{Id}"
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Components.Authorization;
 @attribute [Authorize]
 @inject IProductInterface productInterface
+@inject ICartInterface cartInterface
 @if (isLoading)
 {
     <p><i>Loading....</i></p>
@@ -15,7 +14,7 @@ else
         @if (product != null)
         {
             <div class="row">
-                <div class="col-5">
+                <div class="col-5  p-3">
                     <img src="@product.ImageUrl" class="h-100 w-100" />
                 </div>
                 <div class="col-5 p-2">
@@ -40,10 +39,36 @@ else
     [CascadingParameter]
     public Task<AuthenticationState> _authState { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override  async Task OnParametersSetAsync()
     {
         product = await productInterface.GetProductByIdAsync(Guid.Parse(Id));
         Console.WriteLine(product.Name);
         isLoading = false;
     }
+
+    private async Task AddToCart()
+    {
+        var authState = await _authState;
+        var userId = authState.User.FindFirst("sub")?.Value;
+        var cartDto = new CartDto()
+        {
+            CartHeader = new CartHeaderDto()
+            {
+                UserId = Guid.Parse(userId),
+                CouponCode = ""
+            },
+            CartDetails = new List<CartDetailsDto>()
+            {
+                new CartDetailsDto()
+                {
+                    ProductId=product.ProductId,
+                    Count=count
+                }
+            }
+
+        };
+        await cartInterface.AddToCart(cartDto);
+    }
+
+    
 }

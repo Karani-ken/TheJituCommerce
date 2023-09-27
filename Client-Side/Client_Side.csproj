@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\AddProduct.razor" />
-    <Content Remove="Pages\ProductDetails.razor" />
+    <Content Remove="Pages\Cart.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,25 +23,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\AddProduct.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\AddProduct.razor" />
-    <_ContentIncludedByDefault Remove="Pages\ProductDetails.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Shared\MenuBar.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\AddProduct.razor" />
-    <None Include="Pages\ProductDetails.razor" />
+    <UpToDateCheckInput Remove="Pages\Cart.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\ProductDetails.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Cart.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Cart.razor" />
   </ItemGroup>
 
 </Project>

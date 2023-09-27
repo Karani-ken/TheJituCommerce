@@ -2,6 +2,7 @@ using Blazored.LocalStorage;
 using Client_Side;
 using Client_Side.Services.Authentication;
 using Client_Side.Services.AuthProvider;
+using Client_Side.Services.Cart;
 using Client_Side.Services.Product;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -18,6 +19,7 @@ builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddScoped<IProductInterface, ProductService>();
 builder.Services.AddScoped<IAuthInterface, AuthService>();
+builder.Services.AddScoped<ICartInterface, CartService>();
 
 //configuring authProvider
 builder.Services.AddOptions();

@@ -54,7 +54,7 @@ namespace TheJitu_ProductsService.Controllers
             return Ok(_responseDto);
         }
         //get product by id
-        [HttpGet("GetById{id}")]
+        [HttpGet("GetById/{id}")]
         public async Task<ActionResult<ResponseDto>> GetProductById(Guid id)
         {
             var product = await _productInterface.GetProductByIdAsync(id);

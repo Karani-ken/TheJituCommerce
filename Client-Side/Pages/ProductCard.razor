@@ -1,19 +1,55 @@
 ﻿@inject NavigationManager navmanager﻿
-<div class="card col-3 m-2 p-2" style="width: 18rem;">
-  <img src="@Product.ImageUrl" class="card-img-top" alt="...">
+@inject IProductInterface productInterface
+<div class="shadow-sm rounded-3 p-2 col-3 m-4 " style="width: 16rem; height:25rem;">
+    <img src="@Product.ImageUrl" class="card-img-top h-50 w-100  " alt="...">
   <div class="card-body">
     <h5 class="card-title">@Product.Name</h5>
+    <h5 class="card-subtitle mb-3 text-muted">@Product.CategoryName</h5>
     <p class="card-text">@Product.Description</p>
         <h6 class="card-title">@Product.Price</h6>
-        <button class="btn btn-primary" @onclick="(()=>showProduct(Product.ProductId))">View Product</button>
+        <div class="d-flex justify-content-between align-items-center">
+            @if (authenticated && role == "Admin")
+            {
+                <div>
+                    <a href="product/update/@Product.ProductId" class="btn btn-primary">Update</a>
+                </div>
+               
+
+                <button class="btn btn-danger" @onclick="@(()=>deleteProduct(Product.ProductId))">Delete</button>
+            }
+            else
+            {
+                <button class="btn btn-primary" @onclick="(()=>showProduct(Product.ProductId))">View Product</button>
+            }
+        </div>
+     
+      
   </div>
+  
 </div>
 @code {
     [Parameter]
     public ProductDto? Product { get; set; }
 
+    private string role { get; set; }
+    private bool authenticated { get; set; }
+    [CascadingParameter]
+    public Task<AuthenticationState> _authState { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _authState;
+        role = authState.User.FindFirst("role")?.Value;
+        authenticated = authState.User.Identity.IsAuthenticated;
+        Console.WriteLine(authenticated);
+    }
+
+
     private void showProduct(Guid id)
     {
         navmanager.NavigateTo($"/product/{id}");
+    }
+    private async Task deleteProduct(Guid id)
+    {
+        await productInterface.deleteProduct(id);
     }
 }
