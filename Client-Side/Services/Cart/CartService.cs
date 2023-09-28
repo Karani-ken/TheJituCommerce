@@ -9,7 +9,7 @@ namespace Client_Side.Services.Cart
     {
         private readonly HttpClient _httpClient;
 
-        private readonly string BASEURL = "";
+        private readonly string BASEURL = "https://localhost:7040";
         public CartService(HttpClient httpClient)
         {
             _httpClient = httpClient;

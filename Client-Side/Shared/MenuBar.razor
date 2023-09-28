@@ -5,6 +5,17 @@
 @inject ILocalStorageService localStorage
 ﻿<div class="header">
     <a href="" class="text-decoration-none text-white p-3 fw-bold">Fast Shopping</a>
+    <div class="flex-row p-2">
+        <AuthorizeView>
+            <Authorized>
+                <a href="coupons" class="btn bg-black text-white"> Coupon </a>
+                <a href="cart" class="btn bg-black text-white"> Cart </a>
+             @*    <button @onclick="GoToCart" class="btn bg-black text-white"> Cart </button> *@
+                <a href="orders" class="btn bg-black text-white"> Orders </a>
+            </Authorized>
+        </AuthorizeView>
+
+    </div>
     <div class="flex-row p-2">    
          <AuthorizeView>
              <Authorized>
@@ -30,6 +41,10 @@
     private void login()
     {
         navigationManager.NavigateTo("login");
+    }
+    private void GoToCart()
+    {
+        navigationManager.NavigateTo("cart");
     }
     private async Task logout()
     {

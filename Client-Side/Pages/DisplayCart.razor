@@ -1,0 +1,219 @@
+﻿@page "/cart"
+@inject ICartInterface cartInterface
+@if (cart.CartHeader == null || cart.CartDetails.Count() == 0)
+{
+    <p><i>No Items in the Cart, <a href="/" class="btn btn-info">Start shopping</a></i></p>
+}
+else
+{
+    <div class="card border mt-4 container">
+        <div class="card-header bg-dark text-light ml-0 row">
+            <div class="col-6">
+                <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; Shopping Cart</h3>
+            </div>
+            <div class="col-6 text-end">
+                <a class="btn btn-outline-warning mt-2 btn-sm" href="">Continue Shopping</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class=" d-lg-block">
+                <div class="d-none d-lg-flex text-info">
+                    <div class="col-lg-2">
+                    </div>
+                    <div class="col-lg-5">
+                        Product Details
+                    </div>
+                    <div class="col-lg-2">
+                        Price
+                    </div>
+                    <div class="col-lg-2">
+                        Count
+                    </div>
+                    <div class="col-lg-1">
+                    </div>
+                </div>
+                <hr />
+                @foreach (var item in cart.CartDetails)
+                {
+                    <div class="row h-100 p-2 shadow-sm my-2">
+                        <div class="col-4 col-md-2 text-center py-2">
+                            <img src="@item.Product.ImageUrl" class="rounded" width="100%" />
+                          
+                        </div>
+                        <div class="col-8 col-md-5">
+                            <h5>@item.Product.Name</h5>
+                            <div style="font-size:11px;">@item.Product.Description</div>
+                            <a @onclick="@(()=>RemoveItem(item.CartDetailsId))" class="btn btn-outline-danger">
+                                Remove
+                            </a>
+                        </div>
+                        <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
+                            <span style="font-size:17px;">@string.Format("{0:c}",item.Product.Price)</span>
+                        </div>
+                        <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
+                           
+                         
+                                    <button class="btn btn-danger" @onclick="@(()=>decrement(item))">Minus</button>
+                                <span style="font-size:17px;" class="fw-bolder">@item.Count</span>
+                                    <button class="btn btn-success" @onclick="@(()=>updateCount(item))">Add</button>
+                              
+                            
+                        </div>
+                        
+                       
+                    </div>
+                }
+
+            </div>
+            <div class="row">
+                @if (string.IsNullOrWhiteSpace(cart.CartHeader.CouponCode))
+                {
+                    <div class="col-6">
+                        <span>Coupon:</span>
+                        <input @bind-value="code" />
+                        <button type="submit" class="btn btn-sm btn-success" @onclick="ApplyCoupon"> Apply </button>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-6">
+                        <span>Coupon:</span>
+                        <input @bind-value="cart.CartHeader.CouponCode" disabled/>
+                        <button type="submit" class="btn btn-sm btn-outline-danger" @onclick="RemoveCoupon"> Remove</button>
+                    </div>
+                }
+                <div class="col-6">
+                    <span class="text-danger" style="font-size:21px;">Order Total : @cart.CartHeader.CartTotal.ToString("c0") <br/></span>
+                    @if(cart.CartHeader.Discount > 0)
+                    {
+                        <span class="text-success"> Order Discount : @cart.CartHeader.Discount.ToString("c0")</span>
+                    }
+                </div>
+            </div>
+            <hr/>
+            <div class="row p-2">
+                <div class="col-10"></div>
+                <div class="col-2 ">
+                    <a class="btn btn-success" href="shipment">Place Order</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+
+@code {
+    CartDto cart = new CartDto();
+    [CascadingParameter]
+    public Task<AuthenticationState> _authState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _authState;
+        var userId = authState.User.FindFirst("sub")?.Value;
+        cart = await cartInterface.GetCartByUserId(Guid.Parse(userId));
+    }
+    //apply coupon
+    private string code="";
+    private async Task ApplyCoupon()
+    {
+        var authState = await _authState;
+        var userId = authState.User.FindFirst("sub")?.Value;
+
+        var cartDto = new CartDto()
+        {
+            CartHeader = new CartHeaderDto()
+            {
+                UserId = Guid.Parse(userId),
+                CouponCode = code
+            },
+            CartDetails = new List<CartDetailsDto>()
+        };
+        await cartInterface.ApplyCoupons(cartDto);
+        cart = await cartInterface.GetCartByUserId(Guid.Parse(userId));
+    }
+
+    //remove coupon
+    public async Task RemoveCoupon()
+    {
+        var authState = await _authState;
+        var userId = authState.User.FindFirst("sub")?.Value;
+        var cartDto = new CartDto()
+            {
+                CartHeader = new CartHeaderDto()
+                {
+                    UserId = Guid.Parse(userId),
+                    CouponCode = " "
+                },
+                CartDetails = new List<CartDetailsDto>()
+
+            };
+
+        await cartInterface.ApplyCoupons(cartDto);
+        cart = await cartInterface.GetCartByUserId(Guid.Parse(userId));
+    }
+
+    //remove Item from cart
+    private async Task RemoveItem(Guid id)
+    {
+        await cartInterface.RemoveFromCart(id);
+        var authState = await _authState;
+        var userId = authState.User.FindFirst("sub")?.Value;
+        cart = await cartInterface.GetCartByUserId(Guid.Parse(userId));
+    }
+    //update product count
+    private async Task updateCount(CartDetailsDto item)
+    {
+        var authState = await _authState;
+        var userId = authState.User.FindFirst("sub")?.Value;
+        var cartDto = new CartDto()
+            {
+                CartHeader = new CartHeaderDto()
+                {
+                    UserId = Guid.Parse(userId),
+                    CouponCode = ""
+                },
+
+                CartDetails = new List<CartDetailsDto>()
+            {
+                new CartDetailsDto()
+                {
+                    ProductId=item.ProductId,
+                    Count=1
+                }
+            }
+            };
+        await cartInterface.AddToCart(cartDto);
+        cart = await cartInterface.GetCartByUserId(Guid.Parse(userId));
+    }
+    //decrease product count 
+    private async Task decrement(CartDetailsDto item)
+    {
+        var authState = await _authState;
+        var userId = authState.User.FindFirst("sub")?.Value;
+        var cartDto = new CartDto()
+            {
+                CartHeader = new CartHeaderDto()
+                {
+                    UserId = Guid.Parse(userId),
+                    CouponCode = ""
+                },
+
+                CartDetails = new List<CartDetailsDto>()
+            {
+                new CartDetailsDto()
+                {
+                    ProductId=item.ProductId,
+                    Count=-1
+                }
+            }
+            };
+        await cartInterface.AddToCart(cartDto);
+        cart = await cartInterface.GetCartByUserId(Guid.Parse(userId));
+    }
+
+
+}

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Cart.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Shared\MenuBar.razor.css" />
   </ItemGroup>
 
@@ -24,18 +20,6 @@
 
   <ItemGroup>
     <Content Include="Shared\MenuBar.razor.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Cart.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Cart.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\Cart.razor" />
   </ItemGroup>
 
 </Project>
