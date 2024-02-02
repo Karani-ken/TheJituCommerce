@@ -23,7 +23,7 @@ namespace TheJitu_ProductsService.Controllers
         }
         //add product
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<ResponseDto>> AddProducts(ProductRequestDto newProduct)
         {
             var product = _mapper.Map<Product>(newProduct);
@@ -70,7 +70,7 @@ namespace TheJitu_ProductsService.Controllers
         }
         //update product
         [HttpPut]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<ResponseDto>> UpdateProduct(Guid id, ProductRequestDto productRequestDto)
         {
             var productToUpdate = await _productInterface.GetProductByIdAsync(id);
@@ -86,7 +86,7 @@ namespace TheJitu_ProductsService.Controllers
             return Ok(_responseDto);
         }
         [HttpDelete]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<ResponseDto>> DeleteProduct(Guid id)
         {
             var productToDelete = await _productInterface.GetProductByIdAsync(id);

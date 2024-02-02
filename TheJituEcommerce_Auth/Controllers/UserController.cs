@@ -36,13 +36,13 @@ namespace TheJituEcommerce_Auth.Controllers
                 return BadRequest(_response);
             }
             //send email to queue
-            var queueName = _configuration.GetSection("QueuesandTopics:RegisterUser").Get<string>();
-            var message = new UserMessage()
-            {
-                Email = registerRequestDto.Email,
-                Name = registerRequestDto.Name
-            };
-            await _messageBus.PublishMessage(message, queueName);
+            //var queueName = _configuration.GetSection("QueuesandTopics:RegisterUser").Get<string>();
+            //var message = new UserMessage()
+            //{
+            //    Email = registerRequestDto.Email,
+            //    Name = registerRequestDto.Name
+            //};
+            //await _messageBus.PublishMessage(message, queueName);
             return Ok(_response);
         }
         [HttpPost("login")]

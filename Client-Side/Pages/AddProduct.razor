@@ -88,9 +88,11 @@
                 Price = product.Price,
                 CategoryName = product.CategoryName
             };
-        if(product.ProductId == Guid.Empty && product.ProductId == null)
+
+        if(product.ProductId == Guid.Empty || product.ProductId == null)
         {
             var res = await productInterface.AddProduct(theproduct);
+            Console.WriteLine(res);
             navigationManager.NavigateTo("");
         }
         else
