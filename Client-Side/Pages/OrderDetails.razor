@@ -1,0 +1,108 @@
+﻿@page "/orderDetails/{orderId}"
+@using Client_Side.Models.Orders
+@using Client_Side.Services.Orders
+@inject IOrderService orderService
+
+@if (isLoading)
+{
+
+}
+else
+{
+
+    <div class="row">
+        <div class="col-6">
+            <img src="https://cdn.pixabay.com/photo/2018/05/16/18/08/e-commerce-3406613_640.jpg" class="h-48 w-100">
+            <p class="mt-4">Name : @order.Name</p>
+            <p class="mt-4">Phone Number  : @order.Phone</p>
+        </div>
+        <div class="col-6">
+            <div class="p-2">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="fw-bolder">Order Summary</span>
+                </h4>
+                <label class="bg-light text-dark text-center form-control my-2 fw-bolder " style="font-size:24px;">Order Status - @order.Status</label>
+
+                <ul class="list-group mb-3">
+                    @foreach (var detail in order.OrderDetails)
+                    {
+                        <li class="list-group-item d-flex justify-content-between p-2">
+                            <div class="row container">
+                                <div class="col-8" style="font-size:24px;">
+
+                                    <h6 class="my-0 text-white-50">@detail.ProductName</h6>
+                                    <small class="text-muted">Price : @detail.Price.ToString("c0")</small><br />
+                                    <small class="text-muted">Quantity : @detail.Count</small>
+                                </div>
+                                <div class="col-4 text-end">
+                                    <p class="text-success">@((detail.Count * detail.Price).ToString("c"))</p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    <li class="list-group-item bg-light">
+                        <div class="row container">
+                            <div class="col-6 fw-bolder text-black">
+                                <h5 class="fw-bolder text-black">TOTAL </h5>
+                            </div>
+                            <div class="col-6 text-end">
+                                <h5 class="fw-bolder text-black">@order.OrderTotal.ToString("c")</h5>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="flex-row gap-3">
+                    @if (role == "admin")
+                    {
+                        @if (order.Status == "Approved")
+                        {
+                            <button class=" p-2 btn btn-success form-control my-1" style="width:180px;margin-right:10px;" @onclick="@(()=>UpdateOrder("ReadyForPickup"))">Ready for Pickup</button>
+                        }
+                        @if (order.Status == "ReadyForPickup")
+                        {
+                            <button class="p-2 btn btn-success form-control my-1" style="width:180px; margin-right:10px;" @onclick="@(()=>UpdateOrder("Complete"))">Complete Order</button>
+                        }
+
+                        if (order.Status == "Approved" || order.Status == "ReadyForPickup")
+                        {
+                            <button class="p-2 btn btn-danger form-control my-1" style="width:180px; margin-right:10px;" @onclick="@(()=>UpdateOrder("Cancelled"))">Cancel Order</button>
+                        }
+                        
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    OrderHeaderDto order = new OrderHeaderDto();
+    private string role { get; set; }
+    [CascadingParameter]
+    public Task<AuthenticationState> _authState { get; set; }
+
+    private bool isLoading = true;
+    [Parameter]
+    public string orderId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var authState = await _authState;
+        role = authState.User.FindFirst("role")?.Value;
+
+        order = await orderService.GetOrderByID(Guid.Parse(orderId));
+
+        isLoading = false;
+
+    }
+
+    private async Task UpdateOrder(string status)
+    {
+
+        await orderService.updateOrder(order.OrderHeaderId, status);
+       order= await orderService.GetOrderByID(Guid.Parse(orderId));
+    }
+
+}

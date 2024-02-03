@@ -1,0 +1,131 @@
+﻿@page "/orders"
+@using Client_Side.Services.Orders
+@inject IOrderService orderService
+@inject IJSRuntime jsRuntime
+@using Client_Side.Models.Orders
+
+@if (isLoading)
+{
+	<p><i>Loading Orders....</i></p>
+}
+else
+{
+	<div class="card shadow border-0 mt-4">
+	<div class="card-header bg-secondary bg-gradient ml-0 py-3 d-flex justify-content-between">
+		<div class="row">
+				<h1 class="text-white">Order List</h1>
+		</div>
+		<ul class="list-group list-group-horizontal-sm pt-2">
+			<a class="p-2" @onclick="@(()=>Filter(""))"  style="text-decoration:none">
+			<li class="list-group-item">All</li>
+			</a>
+
+
+			<a class="p-2" @onclick="@(()=>Filter("Approved"))" style="text-decoration:none">
+				<li class="list-group-item">Approved</li>
+			</a>
+			
+			<a class="p-2" @onclick="@(()=>Filter("Complete"))"  style="text-decoration:none">
+			<li class="list-group-item">Completed</li>
+			</a>
+
+			<a class="p-2" @onclick="@(()=>Filter("ReadyForPickup"))"  style="text-decoration:none">
+			<li class="list-group-item">Ready For PickUp</li>
+			</a>
+
+			<a class="p-2" @onclick="@(()=>Filter("Pending"))"  style="text-decoration:none">
+			<li class="list-group-item">Pending</li>
+			</a>
+
+			<a class="p-2" @onclick="@(()=>Filter("Cancelled"))"  style="text-decoration:none">
+			<li class="list-group-item">Cancelled</li>
+			</a>
+
+			
+		</ul>
+	</div>
+	<div class="card-body p-4">
+		<table id="orderTable" class="table table-bordered table-striped pt-3" style="width:100%">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Email</th>
+					<th>Name</th>
+					<th>Phone</th>
+					<th>Status</th>
+					<th>Total</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in orderList)
+				{
+					<tr>
+						<td>@item.OrderHeaderId</td>
+						<td>@item.Email</td>
+						<td>@item.Name</td>
+						<td>@item.Phone</td>
+						<td>@item.Status</td>
+						<td>@item.OrderTotal.ToString("c0")</td>
+						<td>
+								@if (role == "admin")
+								{
+									<a href="orderDetails/@item.OrderHeaderId" class="btn btn-success">Edit</a>
+								}
+								else
+								{
+									<a href="orderDetails/@item.OrderHeaderId" class="btn btn-success">Details</a>
+								}
+								
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+}
+
+
+@code {
+	[CascadingParameter]
+	public Task<AuthenticationState> _authState { get; set; }
+
+	public List<OrderHeaderDto> orderList = new List<OrderHeaderDto>();
+	private string role { get; set; }
+
+	private bool isLoading = true;
+
+	protected override async Task OnInitializedAsync()
+	{
+
+		var authState =await _authState;
+		var roles=authState.User.FindFirst("role")?.Value;
+		role = roles;
+		var userID=authState.User.FindFirst("sub")?.Value;
+		if (roles == "admin")
+		{
+			orderList = await orderService.GetAllOrders();
+		}
+		else
+		{
+			orderList = await orderService.GetAllOrders(userID);
+		}
+		isLoading = false;
+	}
+
+	  private void Filter(string Value)
+	{
+		// Use JavaScript Interop to apply the filter
+		jsRuntime.InvokeVoidAsync("applyFilter", Value);
+	}
+
+	 protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			await jsRuntime.InvokeVoidAsync("initializeDataTable");
+		}
+	}
+
+}

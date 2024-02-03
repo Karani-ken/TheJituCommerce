@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\OrderDetails.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Shared\MenuBar.razor.css" />
   </ItemGroup>
 
@@ -21,6 +25,18 @@
 
   <ItemGroup>
     <Content Include="Shared\MenuBar.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\OrderDetails.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\OrderDetails.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\OrderDetails.razor" />
   </ItemGroup>
 
 </Project>

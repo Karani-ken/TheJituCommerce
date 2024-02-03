@@ -1,0 +1,58 @@
+﻿@page "/orderSuccess/{orderId}"
+@using Client_Side.Services.Orders
+@inject IOrderService orderService
+@inject ICartInterface cartInterface
+@if (isLoading)
+{
+    <p><i>Loading...</i></p>
+}
+else
+{
+    @if (isPaymentSucess)
+    {
+        <div class="row">
+            <div class="col-6">
+                <img src="https://cdn.pixabay.com/photo/2018/09/11/17/38/delivery-3670118_640.jpg" class="h-100 w-100" />
+            </div>
+            <div class="col-6 p-2">
+                <p>Order Placed Successfully</p>
+                <p><i> Congratulations and your order will be shipped successfully </i></p>
+
+                <a class="btn btn-outline-success mt-2 btn-sm" href="">GO TO HOMEPAGE</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-6">
+                <img src="https://cdn.pixabay.com/photo/2016/10/04/13/52/fail-1714367_640.jpg" class="h-100 w-100" />
+            </div>
+            <div class="col-6 p-2">
+                <p>Order Placement Failed</p>
+                <a class="btn btn-outline-success mt-2 btn-sm" href="">GO TO HOMEPAGE</a>
+            </div>
+        </div>
+    }
+}
+
+@code {
+
+    [Parameter]
+    public string orderId { get; set; }
+
+    private bool isLoading = true;
+    private bool isPaymentSucess = false;
+
+    [CascadingParameter]
+    public Task<AuthenticationState> _authState { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+
+        var authState = await _authState;
+        var userID = authState.User.FindFirst("sub")?.Value;
+        isPaymentSucess = await orderService.ValidatePayment(Guid.Parse(orderId));
+        await cartInterface.CartDelete(Guid.Parse(userID));
+        isLoading = false;
+    }
+}

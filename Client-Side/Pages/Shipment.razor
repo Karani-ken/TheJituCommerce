@@ -1,0 +1,94 @@
+﻿@page "/shipment"
+@using Client_Side.Models.Orders
+@using Client_Side.Services.Orders
+
+@inject ICartInterface cartInterface
+@inject IOrderService orderService
+@inject NavigationManager navigationManager
+@if (isLoading)
+{
+    <p><i>Loading Order ...</i></p>
+}
+else
+{
+
+    <div class=" container row">
+
+        <div class="col-6">
+            <h1> Shipment details</h1>
+            <div class="form-group m-4">
+                <label> Email</label>
+                <input @bind-value="email" class="form-control p-3" />
+            </div>
+
+            <div class="form-group m-4">
+                <label> Name</label>
+                <input @bind-value="name" class="form-control p-3" />
+            </div>
+
+            <div class="form-group m-4">
+                <label> Phone Number</label>
+                <input @bind-value="phoneNumber" class="form-control p-3" />
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card" style="width: 26rem;">
+                <img class="card-img-top" style="width:150px; height:180px" src="https://cdn.pixabay.com/photo/2016/05/26/14/50/delivery-1417310_640.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Order About to  be Placed</h5>
+                    @foreach (var item in cartDto.CartDetails)
+                    {
+                        <p> @item.Product.Name  -- @item.Product.Price.ToString("c0")</p>
+                    }
+                    <p class="fw-bolder">TOTAL: @cartDto.CartHeader.CartTotal.ToString("c0")</p>
+
+                    <a @onclick="completeOrder" class="btn btn-primary">Complete Order</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private string name { get; set; } = "";
+    private string email { get; set; } = "";
+    private string phoneNumber { get; set; } = "";
+    private bool isLoading = true;
+
+    OrderHeaderDto order = new OrderHeaderDto();
+    private CartDto cartDto = new CartDto();
+    [CascadingParameter]
+    public Task<AuthenticationState> _authState { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _authState;
+        var userID = authState.User.FindFirst("sub")?.Value;
+        cartDto = await cartInterface.GetCartByUserId(Guid.Parse(userID));
+        name = authState.User.FindFirst("name")?.Value;
+        email = authState.User.FindFirst("email")?.Value;
+        phoneNumber = authState.User.FindFirst("phone_number")?.Value;
+
+
+        order = await orderService.CreateOrder(cartDto);
+        isLoading = false;
+    }
+
+    private async Task completeOrder()
+    {
+        order.Email = email;
+        order.Name = name;
+        order.Phone = phoneNumber;
+
+        var stripe = new StripeRequestDto()
+            {
+                ApprovedUrl = $"https://localhost:7257/orderSucess/{order.OrderHeaderId}",
+                CancelUrl = "https://localhost:7257/cart",
+                OrderHeader = order,
+
+            };
+
+        var stripeRequest = await orderService.CreateStripe(stripe);
+        navigationManager.NavigateTo(stripeRequest.StripeSessionUrl, true);
+    }
+
+}
