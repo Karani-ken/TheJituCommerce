@@ -81,8 +81,8 @@ else
 
         var stripe = new StripeRequestDto()
             {
-                ApprovedUrl = $"https://localhost:7257/orderSucess/{order.OrderHeaderId}",
-                CancelUrl = "https://localhost:7257/cart",
+                ApprovedUrl = $"https://localhost:7260/orderSuccess/{order.OrderHeaderId}",
+                CancelUrl = "https://localhost:7260/cart",
                 OrderHeader = order,
 
             };

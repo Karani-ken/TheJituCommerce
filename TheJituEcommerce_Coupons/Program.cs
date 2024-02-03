@@ -28,6 +28,13 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //add custom services
 builder.AddSwaggenGenExtension();
 builder.AddAppAuthentication();
+builder.Services.AddCors(options => options.AddPolicy("policy1", build =>
+{
+	build.AllowAnyOrigin();
+	build.AllowAnyHeader();
+	build.AllowAnyMethod();
+}));
+
 var app = builder.Build();
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:Key").Get<string>();
 // Configure the HTTP request pipeline.
@@ -39,7 +46,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseMigration();
 app.UseHttpsRedirection();
-
+app.UseCors("policy1");
 app.UseAuthorization();
 
 app.MapControllers();

@@ -31,9 +31,9 @@ builder.Services.AddHttpClient("Coupon", c => c.BaseAddress = new Uri(builder.Co
 
 builder.Services.AddCors(options => options.AddPolicy("policy1", build =>
 {
-    build.WithOrigins("https://localhost:7269");
-    build.AllowAnyHeader();
-    build.AllowAnyMethod();
+	build.AllowAnyOrigin();
+	build.AllowAnyHeader();
+	build.AllowAnyMethod();
 }));
 
 builder.AddSwaggenGenExtension();

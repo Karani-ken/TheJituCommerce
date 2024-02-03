@@ -55,5 +55,4 @@ app.UseAuthorization();
 
 
 app.MapControllers();
-app.UseCors("policy1");
 app.Run();

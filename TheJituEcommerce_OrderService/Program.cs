@@ -20,6 +20,12 @@ builder.Services.AddScoped<IOrderInterface, OrderService>();
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddCors(options => options.AddPolicy("policy1", build =>
+{
+	build.AllowAnyOrigin();
+	build.AllowAnyHeader();
+	build.AllowAnyMethod();
+}));
 
 var app = builder.Build();
 
@@ -35,7 +41,7 @@ Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:Key
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseCors("policy1");
 app.MapControllers();
 app.UseMigration();
 app.Run();
