@@ -28,19 +28,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\OrderDetails.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\OrderDetails.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Pages\OrderDetails.razor" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\sample-data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\OrderDetails.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\OrderDetails.razor" />
   </ItemGroup>
 
 </Project>

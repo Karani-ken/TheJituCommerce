@@ -19,6 +19,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IOrderInterface, OrderService>();
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.AddAppAuthentication();
+builder.AddSwaggenGenExtension();
 
 builder.Services.AddCors(options => options.AddPolicy("policy1", build =>
 {
@@ -39,7 +41,7 @@ if (app.Environment.IsDevelopment())
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:Key").Get<string>();
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("policy1");
 app.MapControllers();

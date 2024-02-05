@@ -9,5 +9,11 @@ namespace TheJituEcommerce_OrderService.Services.IService
         Task<StripeRequestDto> StripePayment(StripeRequestDto stripeRequestDto);
 
         Task<bool> ValidatePayment(Guid OrderId);
-    }
+
+		Task<IEnumerable<OrderHeaderDto>> Getorders(string? UserId = "");
+
+		Task<OrderHeaderDto> Getorder(Guid id);
+
+		Task<OrderHeaderDto> updateOrder(Guid orderId, string newStatus);
+	}
 }

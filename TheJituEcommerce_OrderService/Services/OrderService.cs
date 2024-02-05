@@ -31,7 +31,24 @@ namespace TheJituEcommerce_OrderService.Services
             return orderHeaderDto;
         }
 
-        public async Task<StripeRequestDto> StripePayment(StripeRequestDto stripeRequestDto)
+		public async Task<OrderHeaderDto> Getorder(Guid id)
+		{
+			OrderHeader orderHeader = await _appDbContext.OrderHeaders.Include(x => x.OrderDetails).FirstAsync(o => o.OrderHeaderId == id);
+			return _mapper.Map<OrderHeaderDto>(orderHeader);
+		}
+
+		public async Task<IEnumerable<OrderHeaderDto>> Getorders(string? UserId = "")
+		{
+			if (UserId == null || string.IsNullOrWhiteSpace(UserId))
+			{
+				IEnumerable<OrderHeader> orders = await _appDbContext.OrderHeaders.Include(x => x.OrderDetails).OrderByDescending(u => u.OrderHeaderId).ToListAsync();
+				return _mapper.Map<IEnumerable<OrderHeaderDto>>(orders);
+			}
+			IEnumerable<OrderHeader> orders1 = await _appDbContext.OrderHeaders.Include(x => x.OrderDetails).Where(x => x.UserId == UserId).OrderByDescending(u => u.OrderHeaderId).ToListAsync();
+			return _mapper.Map<IEnumerable<OrderHeaderDto>>(orders1);
+		}
+
+		public async Task<StripeRequestDto> StripePayment(StripeRequestDto stripeRequestDto)
         {
             var options = new SessionCreateOptions()
             {
@@ -86,7 +103,12 @@ namespace TheJituEcommerce_OrderService.Services
             return stripeRequestDto;
         }
 
-        public async Task<bool> ValidatePayment(Guid OrderId)
+		public Task<OrderHeaderDto> updateOrder(Guid orderId, string newStatus)
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<bool> ValidatePayment(Guid OrderId)
         {
             OrderHeader order = await _appDbContext.OrderHeaders.FirstOrDefaultAsync(x => x.OrderHeaderId == OrderId);
             var service = new SessionService();
